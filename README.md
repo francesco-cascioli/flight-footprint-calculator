@@ -1,143 +1,179 @@
-# Flight Footprint Calculator
+# ✈️ Flight Footprint Calculator
 
-A React web application to calculate the carbon footprint of flights. Users can select departure and arrival airports, specify the number of passengers, and choose a cabin class to get an estimate of CO₂ emissions.
+A React-based web app that calculates the carbon footprint of air travel using real flight data.  
+This project integrates with the [GoClimate API](https://api.goclimate.com/) and [Airport Database API](https://airportgap.com/) to provide accurate CO₂ emissions calculations for flights worldwide.
 
-## Features
+Built to practice and demonstrate front-end development skills with **React**, **TypeScript**, **Axios**, and **Vite**.
 
-- **Airport Selection**: Choose from a comprehensive database of international airports
-- **Passenger Count**: Specify the number of passengers (1-20)
-- **Cabin Class**: Select from Economy, Premium Economy, Business, or First Class
-- **CO₂ Calculation**: Get accurate CO₂ emissions per passenger and total
-- **Responsive Design**: Works on desktop, tablet, and mobile devices
-- **Real-time API**: Uses GoClimate API for precise calculations
-- **Fallback System**: Local calculation when API is unavailable
+🔗 [Live Demo](https://flight-footprint.netlify.app/)
 
-## Technologies Used
+---
 
-- **React 18** - Modern React with hooks
-- **TypeScript** - Type-safe JavaScript
-- **Vite** - Fast build tool and development server
-- **Axios** - HTTP client for API requests
-- **CSS3** - Modern styling with gradients
-- **GoClimate API** - Carbon footprint calculations
-- **AirportGap API** - Airport database
+## 🔍 Features
 
-## Getting Started
+- 🛫 Calculate CO₂ emissions for any flight route
+- 🌍 Search from 100+ international airports
+- 👥 Multi-passenger calculations
+- ✈️ Different cabin class options (Economy, Business, First)
+- 📊 Visual impact level indicators
+- 💡 Educational facts about carbon footprints
+- 🔄 Fallback calculation system for reliability
+- 📱 Responsive design and mobile-friendly
+- 🎨 Modern gradient UI with smooth animations
+
+---
+
+## 🧱 Tech Stack
+
+- **React 19** – component-based UI
+- **TypeScript** – type safety and better development experience
+- **Vite** – fast development and build tool
+- **Axios** – API calls to GoClimate and Airport APIs
+- **CSS3** – modern styling with gradients and animations
+- **Environment Variables** – secure API key management
+
+---
+
+## 📁 Project Structure
+
+src/
+├── components/        # Reusable UI components
+│   ├── AirportSelect.tsx
+│   └── ResultCard.tsx
+├── pages/             # Main application views
+│   └── Calculator.tsx
+├── services/          # API integration
+│   └── api.ts
+├── styles/            # Global CSS styling
+│   └── main.css
+├── App.tsx            # Main application component
+└── main.tsx           # Entry point
+
+---
+
+## 🚀 Getting Started
 
 ### Prerequisites
-
-- Node.js (version 16 or higher)
+- Node.js (v16 or higher)
 - npm or yarn
-- GoClimate API key (optional, fallback available)
+- GoClimate API key
 
 ### Installation
 
-1. Clone the repository:
-```bash
-git clone https://github.com/francesco-cascioli/flight-footprint-calculator.git
-cd flight-footprint-calculator
-```
+1. **Clone the repository**
+   ```bash
+   git clone https://github.com/francesco-cascioli/flight-footprint-calculator.git
+   cd flight-footprint-calculator
+   ```
 
-2. Install dependencies:
-```bash
-npm install
-```
+2. **Install dependencies**
+   ```bash
+   npm install
+   ```
 
-3. Create environment file:
-```bash
-cp .env.example .env
-```
+3. **Set up environment variables**
+   ```bash
+   cp .env.example .env
+   ```
+   Add your GoClimate API key to `.env`:
+   ```
+   VITE_GOCLIMATE_API_KEY=your_api_key_here
+   VITE_API_TIMEOUT=10000
+   ```
 
-4. Add your GoClimate API key to `.env`:
-```
-VITE_GOCLIMATE_API_KEY=your_api_key_here
-```
+4. **Start development server**
+   ```bash
+   npm run dev
+   ```
 
-5. Start the development server:
-```bash
-npm run dev
-```
+5. **Build for production**
+   ```bash
+   npm run build
+   ```
 
-6. Open your browser and visit `http://localhost:5173`
+---
 
-## Usage
-
-1. **Select Airports**: Choose your departure and arrival airports from the dropdown
-2. **Enter Passengers**: Specify the number of passengers (1-20)
-3. **Choose Cabin Class**: Select from Economy, Premium Economy, Business, or First Class
-4. **Calculate**: Click "Calculate footprint" to get your CO₂ emissions
-5. **View Results**: See CO₂ per passenger and total emissions with impact level
-
-## API Configuration
+## 🔧 API Integration
 
 ### GoClimate API
-- Get your free API key from [GoClimate](https://www.goclimate.com/)
-- Add it to your `.env` file as `VITE_GOCLIMATE_API_KEY`
-- The app works without API key using fallback calculations
+- **Endpoint**: `https://api.goclimate.com/v1/flight_footprint`
+- **Purpose**: Calculate CO₂ emissions for flights
+- **Fallback**: Local calculation using Haversine formula
 
-### Airport Database
-- Uses AirportGap API for airport suggestions
-- Includes major airports worldwide
-- Local database for faster suggestions
+### Airport Database API
+- **Endpoint**: `https://airportgap.com/api/airports`
+- **Purpose**: Search and autocomplete airport codes
+- **Fallback**: Local database of major airports
 
-## Project Structure
+---
 
-```
-src/
-├── components/
-│   ├── AirportSelect.tsx    # Airport selection component
-│   ├── PassengerInput.tsx   # Passenger count input
-│   └── ResultCard.tsx       # Results display
-├── pages/
-│   └── Calculator.tsx        # Main calculator page
-├── services/
-│   └── api.ts              # API integration
-├── styles/
-│   └── main.css            # Global styles
-└── App.tsx                 # Root component
-```
+## 🌍 Supported Airports
 
-## Features in Detail
+The app includes a comprehensive database of international airports:
 
-### Airport Selection
-- Autocomplete with search functionality
-- Major airports from all continents
-- IATA code display for clarity
-- Real-time suggestions
+- **🇮🇹 Italy**: Rome, Milan, Venice, Naples, Florence, Perugia
+- **🇪🇺 Europe**: London, Paris, Madrid, Barcelona, Frankfurt, Amsterdam
+- **🇺🇸 USA**: New York, Los Angeles, Chicago, Miami, San Francisco
+- **🌏 Asia**: Tokyo, Istanbul, Dubai, Singapore, Hong Kong, Seoul
+- **🇦🇺 Australia**: Sydney, Melbourne, Brisbane, Perth
+- **🇧🇷 South America**: São Paulo, Rio de Janeiro, Buenos Aires, Lima
+- **🇿🇦 Africa**: Johannesburg, Cape Town, Nairobi
+- **🇷🇺 Russia**: Moscow, Saint Petersburg
+- **🇬🇷 Greece**: Athens, Thessaloniki
+- **🇩🇪 Germany**: Berlin, Hamburg, Cologne, Düsseldorf
 
-### CO₂ Calculation
-- Accurate emissions based on distance and cabin class
-- GoClimate API integration
-- Fallback calculation using Haversine formula
-- Impact level indicators (Low, Medium, High, Very High)
+---
 
-### Responsive Design
-- Mobile-first approach
-- Flexible grid layout
-- Touch-friendly interface
-- Optimized for all screen sizes
+## 🎨 Design Features
 
-## Contributing
+- **Modern UI**: Clean, professional interface with gradient backgrounds
+- **Responsive**: Works perfectly on desktop, tablet, and mobile
+- **Accessibility**: Proper labels, ARIA attributes, and keyboard navigation
+- **Visual Feedback**: Loading states, error handling, and success animations
+- **Impact Indicators**: Color-coded CO₂ impact levels (Low, Medium, High, Very High)
 
-1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
+---
 
-## License
+## 🤔 Why this project?
 
-This project is licensed under the MIT License.
+This app was developed to apply React and TypeScript fundamentals while building something meaningful for the environment.
+I've focused on:
 
-## Acknowledgments
+- **Real-world API integration** with proper error handling
+- **Type safety** with TypeScript throughout
+- **User experience** with smooth animations and responsive design
+- **Environmental awareness** with educational content
+- **Reliability** with fallback calculation systems
+- **Professional code structure** with clean, maintainable components
 
-- [GoClimate](https://www.goclimate.com/) for carbon footprint calculations
-- [AirportGap](https://airportgap.com/) for airport database
-- [React](https://reactjs.org/) for the amazing framework
-- [Vite](https://vitejs.dev/) for the fast build tool
+---
 
-## Contact
+## 🔮 Future Enhancements
 
-Francesco Cascioli - [GitHub](https://github.com/francesco-cascioli)
+- [ ] Carbon offset recommendations
+- [ ] Flight comparison tool
+- [ ] Historical emissions tracking
+- [ ] Multi-language support
+- [ ] Export results to PDF
+- [ ] Social sharing features
 
-Project Link: [https://github.com/francesco-cascioli/flight-footprint-calculator](https://github.com/francesco-cascioli/flight-footprint-calculator)
+---
+
+## 👤 Author
+
+Francesco Cascioli – Front-end developer in training  
+📍 Umbria, Italy  
+📫 [GitHub](https://github.com/francesco-cascioli)
+
+---
+
+## 📄 License
+
+This project is for educational purposes only.  
+All carbon footprint calculations are provided by GoClimate API.
+
+---
+
+## 🌱 Environmental Impact
+
+This calculator helps users understand the environmental impact of their travel choices, promoting awareness and encouraging more sustainable transportation decisions.
