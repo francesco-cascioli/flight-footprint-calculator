@@ -112,15 +112,13 @@ src/
 The app includes a comprehensive database of international airports:
 
 - **🇮🇹 Italy**: Rome, Milan, Venice, Naples, Florence, Perugia
-- **🇪🇺 Europe**: London, Paris, Madrid, Barcelona, Frankfurt, Amsterdam
+- **Europe**: London, Paris, Madrid, Barcelona, Frankfurt, Berlin, Amsterdam, Athens, Istanbul
 - **🇺🇸 USA**: New York, Los Angeles, Chicago, Miami, San Francisco
-- **🌏 Asia**: Tokyo, Istanbul, Dubai, Singapore, Hong Kong, Seoul
+- **Asia**: Tokyo, Dubai, Singapore, Hong Kong, Seoul, Shanghai, Bangkok
 - **🇦🇺 Australia**: Sydney, Melbourne, Brisbane, Perth
-- **🇧🇷 South America**: São Paulo, Rio de Janeiro, Buenos Aires, Lima
-- **🇿🇦 Africa**: Johannesburg, Cape Town, Nairobi
+- **South America**: São Paulo, Rio de Janeiro, Buenos Aires, Lima
+- **Africa**: Johannesburg, Cape Town, Nairobi
 - **🇷🇺 Russia**: Moscow, Saint Petersburg
-- **🇬🇷 Greece**: Athens, Thessaloniki
-- **🇩🇪 Germany**: Berlin, Hamburg, Cologne, Düsseldorf
 
 ---
 
