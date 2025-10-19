@@ -101,7 +101,6 @@ const AirportSelect: React.FC<AirportSelectProps> = ({ label, value, onChange })
   const [showList, setShowList] = useState(false);
   const [loading, setLoading] = useState(false);
 
-  // Cerca aeroporti (debounce 400ms)
   useEffect(() => {
     if (query.length < 2) {
       setSuggestions([]);
@@ -113,17 +112,14 @@ const AirportSelect: React.FC<AirportSelectProps> = ({ label, value, onChange })
         setLoading(true);
         const queryLower = query.toLowerCase();
         
-        // Prima cerca nel database locale
         const localResults = MAJOR_AIRPORTS.filter(airport => 
           airport.name.toLowerCase().includes(queryLower) ||
           airport.iata.toLowerCase().includes(queryLower) ||
           airport.city.toLowerCase().includes(queryLower)
         );
         
-        // Se abbiamo risultati locali sufficienti, usali
         if (localResults.length >= 3) {
           const sortedLocal = localResults.sort((a, b) => {
-            // Priorità per match esatto
             const aNameExact = a.name.toLowerCase() === queryLower;
             const bNameExact = b.name.toLowerCase() === queryLower;
             if (aNameExact && !bNameExact) return -1;
@@ -139,7 +135,6 @@ const AirportSelect: React.FC<AirportSelectProps> = ({ label, value, onChange })
             if (aCityExact && !bCityExact) return -1;
             if (!aCityExact && bCityExact) return 1;
             
-            // Priorità per Italia
             if (a.country === 'Italy' && b.country !== 'Italy') return -1;
             if (a.country !== 'Italy' && b.country === 'Italy') return 1;
             
@@ -151,7 +146,6 @@ const AirportSelect: React.FC<AirportSelectProps> = ({ label, value, onChange })
           return;
         }
         
-        // Altrimenti usa l'API esterna ma con filtri migliorati
         const url = `https://airportgap.com/api/airports?query=${encodeURIComponent(query)}`;
         const res = await axios.get(url);
         const apiResults: Airport[] = (res.data?.data || []).map((item: { attributes: { name: string; iata: string; city: string; country: string } }) => ({
@@ -161,7 +155,6 @@ const AirportSelect: React.FC<AirportSelectProps> = ({ label, value, onChange })
           country: item.attributes.country,
         }));
         
-        // Combina risultati locali e API, rimuovendo duplicati
         const allResults = [...localResults];
         apiResults.forEach(apiAirport => {
           if (!allResults.find(local => local.iata === apiAirport.iata)) {
@@ -169,55 +162,45 @@ const AirportSelect: React.FC<AirportSelectProps> = ({ label, value, onChange })
           }
         });
         
-        // Filtra paesi non desiderati per query comuni
         const filteredResults = allResults.filter(airport => {
           const queryLower = query.toLowerCase();
           
-          // Per query italiane, mostra solo aeroporti italiani
           if (['roma', 'rome', 'milano', 'milan', 'venezia', 'venice', 'napoli', 'naples', 'firenze', 'florence', 'torino', 'turin', 'bologna', 'palermo', 'catania', 'perugia'].includes(queryLower)) {
             return airport.country === 'Italy';
           }
           
-          // Per query europee, mostra solo aeroporti europei
           if (['londra', 'london', 'parigi', 'paris', 'madrid', 'barcellona', 'barcelona', 'frankfurt', 'monaco', 'munich', 'amsterdam', 'zurigo', 'zurich', 'vienna'].includes(queryLower)) {
             const europeanCountries = ['Italy', 'France', 'Germany', 'Spain', 'United Kingdom', 'Netherlands', 'Switzerland', 'Austria', 'Belgium', 'Portugal', 'Greece'];
             return europeanCountries.includes(airport.country);
           }
           
-          // Per query asiatiche, mostra solo aeroporti asiatici
           if (['tokyo', 'istanbul', 'dubai', 'singapore', 'hong kong', 'seoul', 'bangkok', 'beijing', 'pechino', 'shanghai'].includes(queryLower)) {
             const asianCountries = ['Japan', 'Turkey', 'United Arab Emirates', 'Singapore', 'Hong Kong', 'South Korea', 'Thailand', 'China'];
             return asianCountries.includes(airport.country);
           }
           
-          // Per query australiane
           if (['sydney', 'melbourne', 'brisbane', 'perth', 'australia'].includes(queryLower)) {
             return airport.country === 'Australia';
           }
           
-          // Per query sudamericane
           if (['sao paulo', 'são paulo', 'rio de janeiro', 'brasilia', 'brasília', 'brasil', 'brazil', 'buenos aires', 'argentina', 'lima', 'peru'].includes(queryLower)) {
             const southAmericanCountries = ['Brazil', 'Argentina', 'Peru'];
             return southAmericanCountries.includes(airport.country);
           }
           
-          // Per query africane
           if (['johannesburg', 'cape town', 'sudafrica', 'south africa', 'nairobi', 'kenya'].includes(queryLower)) {
             const africanCountries = ['South Africa', 'Kenya'];
             return africanCountries.includes(airport.country);
           }
           
-          // Per query russe
           if (['moscow', 'mosca', 'saint petersburg', 'san pietroburgo', 'russia', 'russia'].includes(queryLower)) {
             return airport.country === 'Russia';
           }
           
-          // Per query greche
           if (['athens', 'ateni', 'thessaloniki', 'salonicco', 'greece', 'grecia'].includes(queryLower)) {
             return airport.country === 'Greece';
           }
           
-          // Per query tedesche aggiuntive
           if (['berlin', 'hamburg', 'cologne', 'colonia', 'düsseldorf', 'dusseldorf', 'germany', 'germania'].includes(queryLower)) {
             return airport.country === 'Germany';
           }
@@ -225,9 +208,7 @@ const AirportSelect: React.FC<AirportSelectProps> = ({ label, value, onChange })
           return true;
         });
         
-        // Ordina i risultati filtrati
         const sortedResults = filteredResults.sort((a, b) => {
-          // Priorità per match esatto
           const aNameExact = a.name.toLowerCase() === queryLower;
           const bNameExact = b.name.toLowerCase() === queryLower;
           if (aNameExact && !bNameExact) return -1;
@@ -243,11 +224,9 @@ const AirportSelect: React.FC<AirportSelectProps> = ({ label, value, onChange })
           if (aCityExact && !bCityExact) return -1;
           if (!aCityExact && bCityExact) return 1;
           
-          // Priorità per Italia
           if (a.country === 'Italy' && b.country !== 'Italy') return -1;
           if (a.country !== 'Italy' && b.country === 'Italy') return 1;
           
-          // Priorità per Europa
           const europeanCountries = ['Italy', 'France', 'Germany', 'Spain', 'United Kingdom', 'Netherlands', 'Switzerland', 'Austria', 'Belgium'];
           const aIsEuropean = europeanCountries.includes(a.country);
           const bIsEuropean = europeanCountries.includes(b.country);
@@ -293,16 +272,15 @@ const AirportSelect: React.FC<AirportSelectProps> = ({ label, value, onChange })
         onChange={(e) => {
           const t = e.target.value;
           setQuery(t);
-          // Fallback: se l'utente scrive direttamente un IATA di 3 lettere, salva subito
           if (/^[A-Za-z]{3}$/.test(t.trim())) {
             onChange(t.trim().toUpperCase());
           } else {
-            onChange(""); // reset se non è un codice valido/definitivo
+            onChange("");
           }
           setShowList(true);
         }}
         onFocus={() => query.length > 1 && setShowList(true)}
-        onBlur={() => setTimeout(() => setShowList(false), 150)} // chiudi dopo il click
+        onBlur={() => setTimeout(() => setShowList(false), 150)}
         autoComplete="off"
       />
 
@@ -313,7 +291,7 @@ const AirportSelect: React.FC<AirportSelectProps> = ({ label, value, onChange })
           {suggestions.map((a) => (
             <li
               key={`${a.iata}-${a.name}`}
-              onMouseDown={() => handleSelect(a)}  // 👈 cambia da onClick a onMouseDown
+              onMouseDown={() => handleSelect(a)}
             >
               {a.name} ({a.iata}) — {a.country}
             </li>
@@ -321,7 +299,6 @@ const AirportSelect: React.FC<AirportSelectProps> = ({ label, value, onChange })
         </ul>
       )}
 
-      {/* aiuto debug visivo: mostra cosa ha il parent */}
       <small>
         Selected IATA: <strong>{value || "—"}</strong>
       </small>

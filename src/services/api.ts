@@ -34,7 +34,6 @@ const calculateFallbackFootprint = (origin: string, destination: string, cabinCl
     'LAX': { lat: 33.9416, lon: -118.4085, name: 'Los Angeles International' },
     'YYZ': { lat: 43.6777, lon: -79.6246, name: 'Toronto Pearson' },
     'YVR': { lat: 49.1967, lon: -123.1815, name: 'Vancouver International' },
-    // Asia
     'HND': { lat: 35.5494, lon: 139.7798, name: 'Tokyo Haneda' },
     'NRT': { lat: 35.7720, lon: 140.3928, name: 'Tokyo Narita' },
     'IST': { lat: 41.2753, lon: 28.7519, name: 'Istanbul Airport' },
@@ -46,39 +45,29 @@ const calculateFallbackFootprint = (origin: string, destination: string, cabinCl
     'BKK': { lat: 13.6900, lon: 100.7501, name: 'Bangkok Suvarnabhumi' },
     'PEK': { lat: 40.0799, lon: 116.6031, name: 'Beijing Capital' },
     'PVG': { lat: 31.1434, lon: 121.8052, name: 'Shanghai Pudong' },
-    // Australia
     'SYD': { lat: -33.9399, lon: 151.1753, name: 'Sydney Kingsford Smith' },
     'MEL': { lat: -37.6733, lon: 144.8433, name: 'Melbourne Airport' },
     'BNE': { lat: -27.3842, lon: 153.1175, name: 'Brisbane Airport' },
     'PER': { lat: -31.9403, lon: 115.9669, name: 'Perth Airport' },
-    // Brasile
     'GRU': { lat: -23.4356, lon: -46.4731, name: 'São Paulo Guarulhos' },
     'GIG': { lat: -22.8089, lon: -43.2500, name: 'Rio de Janeiro Galeão' },
     'BSB': { lat: -15.8692, lon: -47.9206, name: 'Brasília International' },
-    // Argentina
     'EZE': { lat: -34.8222, lon: -58.5358, name: 'Buenos Aires Ezeiza' },
     'AEP': { lat: -34.5592, lon: -58.4156, name: 'Buenos Aires Jorge Newbery' },
-    // Perù
     'LIM': { lat: -12.0219, lon: -77.1143, name: 'Lima Jorge Chávez' },
-    // USA aggiuntivi
     'ORD': { lat: 41.9786, lon: -87.9048, name: 'Chicago O\'Hare' },
     'MIA': { lat: 25.7959, lon: -80.2870, name: 'Miami International' },
     'SFO': { lat: 37.6213, lon: -122.3790, name: 'San Francisco International' },
     'SEA': { lat: 47.4502, lon: -122.3088, name: 'Seattle-Tacoma' },
     'DFW': { lat: 32.8968, lon: -97.0380, name: 'Dallas/Fort Worth' },
-    // Sudafrica
     'JNB': { lat: -26.1337, lon: 28.2423, name: 'Johannesburg OR Tambo' },
     'CPT': { lat: -33.9648, lon: 18.6017, name: 'Cape Town International' },
-    // Kenya
     'NBO': { lat: -1.3192, lon: 36.9278, name: 'Nairobi Jomo Kenyatta' },
-    // Russia
     'SVO': { lat: 55.9726, lon: 37.4146, name: 'Moscow Sheremetyevo' },
     'DME': { lat: 55.4148, lon: 37.9060, name: 'Moscow Domodedovo' },
     'LED': { lat: 59.8003, lon: 30.2625, name: 'Saint Petersburg Pulkovo' },
-    // Grecia
     'ATH': { lat: 37.9364, lon: 23.9445, name: 'Athens International' },
     'SKG': { lat: 40.5197, lon: 22.9709, name: 'Thessaloniki Airport' },
-    // Germania aggiuntivi
     'BER': { lat: 52.3519, lon: 13.4938, name: 'Berlin Brandenburg' },
     'HAM': { lat: 53.6304, lon: 9.9882, name: 'Hamburg Airport' },
     'CGN': { lat: 50.8659, lon: 7.1427, name: 'Cologne Bonn' },
@@ -89,12 +78,10 @@ const calculateFallbackFootprint = (origin: string, destination: string, cabinCl
   const destData = airportData[destination.toUpperCase()];
 
   if (!originData || !destData) {
-    // Se non abbiamo dati per questi aeroporti, usa un valore medio
-    return 0.5; // kg CO2 per passeggero
+    return 0.5;
   }
 
-  // Calcola la distanza approssimativa usando la formula di Haversine
-  const R = 6371; // Raggio della Terra in km
+  const R = 6371;
   const dLat = (destData.lat - originData.lat) * Math.PI / 180;
   const dLon = (destData.lon - originData.lon) * Math.PI / 180;
   const a = Math.sin(dLat/2) * Math.sin(dLat/2) +
@@ -196,7 +183,6 @@ export const getFlightFootprint = async (origin: string, destination: string, ca
 
     console.log("✅ API Response:", response.data);
 
-    // Validazione risposta
     if (!response.data || typeof response.data.footprint_kg !== 'number') {
       throw new Error("Invalid response from API");
     }
