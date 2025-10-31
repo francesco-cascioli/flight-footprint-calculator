@@ -89,6 +89,12 @@ const MAJOR_AIRPORTS: Airport[] = [
   { name: "Düsseldorf Airport", iata: "DUS", city: "Düsseldorf", country: "Germany" },
 ];
 
+const CITY_TO_COUNTRY: Record<string, string> = MAJOR_AIRPORTS.reduce((acc, airport) => {
+  const key = airport.city.toLowerCase();
+  if (!acc[key]) acc[key] = airport.country;
+  return acc;
+}, {} as Record<string, string>);
+
 interface AirportSelectProps {
   label: string;
   value: string;
@@ -164,47 +170,8 @@ const AirportSelect: React.FC<AirportSelectProps> = ({ label, value, onChange })
         
         const filteredResults = allResults.filter(airport => {
           const queryLower = query.toLowerCase();
-          
-          if (['roma', 'rome', 'milano', 'milan', 'venezia', 'venice', 'napoli', 'naples', 'firenze', 'florence', 'torino', 'turin', 'bologna', 'palermo', 'catania', 'perugia'].includes(queryLower)) {
-            return airport.country === 'Italy';
-          }
-          
-          if (['londra', 'london', 'parigi', 'paris', 'madrid', 'barcellona', 'barcelona', 'frankfurt', 'monaco', 'munich', 'amsterdam', 'zurigo', 'zurich', 'vienna'].includes(queryLower)) {
-            const europeanCountries = ['Italy', 'France', 'Germany', 'Spain', 'United Kingdom', 'Netherlands', 'Switzerland', 'Austria', 'Belgium', 'Portugal', 'Greece'];
-            return europeanCountries.includes(airport.country);
-          }
-          
-          if (['tokyo', 'istanbul', 'dubai', 'singapore', 'hong kong', 'seoul', 'bangkok', 'beijing', 'pechino', 'shanghai'].includes(queryLower)) {
-            const asianCountries = ['Japan', 'Turkey', 'United Arab Emirates', 'Singapore', 'Hong Kong', 'South Korea', 'Thailand', 'China'];
-            return asianCountries.includes(airport.country);
-          }
-          
-          if (['sydney', 'melbourne', 'brisbane', 'perth', 'australia'].includes(queryLower)) {
-            return airport.country === 'Australia';
-          }
-          
-          if (['sao paulo', 'são paulo', 'rio de janeiro', 'brasilia', 'brasília', 'brasil', 'brazil', 'buenos aires', 'argentina', 'lima', 'peru'].includes(queryLower)) {
-            const southAmericanCountries = ['Brazil', 'Argentina', 'Peru'];
-            return southAmericanCountries.includes(airport.country);
-          }
-          
-          if (['johannesburg', 'cape town', 'sudafrica', 'south africa', 'nairobi', 'kenya'].includes(queryLower)) {
-            const africanCountries = ['South Africa', 'Kenya'];
-            return africanCountries.includes(airport.country);
-          }
-          
-          if (['moscow', 'mosca', 'saint petersburg', 'san pietroburgo', 'russia', 'russia'].includes(queryLower)) {
-            return airport.country === 'Russia';
-          }
-          
-          if (['athens', 'ateni', 'thessaloniki', 'salonicco', 'greece', 'grecia'].includes(queryLower)) {
-            return airport.country === 'Greece';
-          }
-          
-          if (['berlin', 'hamburg', 'cologne', 'colonia', 'düsseldorf', 'dusseldorf', 'germany', 'germania'].includes(queryLower)) {
-            return airport.country === 'Germany';
-          }
-          
+          const mappedCountry = CITY_TO_COUNTRY[queryLower];
+          if (mappedCountry) return airport.country === mappedCountry;
           return true;
         });
         
@@ -223,16 +190,7 @@ const AirportSelect: React.FC<AirportSelectProps> = ({ label, value, onChange })
           const bCityExact = b.city.toLowerCase() === queryLower;
           if (aCityExact && !bCityExact) return -1;
           if (!aCityExact && bCityExact) return 1;
-          
-          if (a.country === 'Italy' && b.country !== 'Italy') return -1;
-          if (a.country !== 'Italy' && b.country === 'Italy') return 1;
-          
-          const europeanCountries = ['Italy', 'France', 'Germany', 'Spain', 'United Kingdom', 'Netherlands', 'Switzerland', 'Austria', 'Belgium'];
-          const aIsEuropean = europeanCountries.includes(a.country);
-          const bIsEuropean = europeanCountries.includes(b.country);
-          if (aIsEuropean && !bIsEuropean) return -1;
-          if (!aIsEuropean && bIsEuropean) return 1;
-          
+
           return a.name.localeCompare(b.name);
         });
         
